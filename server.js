@@ -74,7 +74,7 @@ app.post('/submitJson', function (req,res) {
          if(err){
           }else{
               //console.log(res);
-             // unlink();
+              unlink();
               res.send('fff')
           }
     });
@@ -103,4 +103,4 @@ var unlink = function (argument) {
 }
 app.listen(port, function () {
   console.log("Server listening on port ", port);
-})
+})  
