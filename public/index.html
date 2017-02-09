@@ -13,7 +13,10 @@
 
   </head>
   <body>
-  <form id="uploadForm" enctype="multipart/form-data">
+  <form id        =  "uploadForm"
+       enctype   =  "multipart/form-data"
+       method    =  "post"
+  >
     <div class="row" style="margin: 20px 0px 20px 100px">
        <div class="col-lg-3">
        <input type="file" name="userPhoto" id="file" accept=".csv"/>
@@ -70,51 +73,20 @@
     fileName = file.name; 
     console.log(file.name)
 
-    var reader = new FileReader();               
-    reader.onload = function(event) {
-     console.log(reader.result);
-     var i = 0;
-     var chunkSize = 1000;
-     var b_blob = event.target.result;;
-     var bblob = b_blob.split('base64,');
-     var imageData = bblob[1];
-     var imageLength = imageData.length;
-     console.log(imageLength)
-     var isLastChunk = false;
-     var chunk;
-     
-     for(i=0;i<=imageLength; i+= chunkSize){
-       //var imgString = imageData.subString(i,chunkSize);
-        if(imageData.length > i + chunkSize) {
-          chunk = imageData.substr(i, chunkSize);
-          console.log(chunk)
-        } else {
-          chunk = imageData.substr(i,chunkSize);
-          isLastChunk = true;
-          console.log(chunk)
-        }
-       $.ajax({
-          url: '/api/photo',
-          type: 'POST',
-          contentType: 'application/x-www-form-urlencoded',
-          data: {data:chunk,fileName:fileName},
-          cache: false,
-
-          
-          success: function (data) {
-              console.log(data)
-          },
-          error: function( jqXhr, textStatus, errorThrown ){
-              console.log( errorThrown );
-          }
-      });
-            
-     }
-     
-    }
-      reader.readAsDataURL(file);
-      event.preventDefault();
     
+    $.ajax({
+        url: '/api/photo',
+        type: 'POST',
+        data: formData,
+        async: false,
+        success: function (data) {
+            console.log(data)
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+    return false;
 });   
 });
   </script>

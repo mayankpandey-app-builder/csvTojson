@@ -25,23 +25,31 @@ app.get('/',function(req,res){
 
 app.post('/api/photo',multipart(),function(req,res){
     //console.log(req.files);
-    //console.log(req.body);
-    var data        = req.body.data;
-    var imageName    = req.body.fileName;
+    var imageName     = req.files.userPhoto.name;
+    var imagePath   = req.files.userPhoto.path;
     
-    fs.appendFile("public/upload/"+imageName, data, 'Base64', function(err,res) {
-           if(err){
-        }else{
-        }
+    var sourcePath  = imagePath;
+    var folder = "public/upload/"+imageName
+    console.log(imagePath)
+    console.log(folder)
+
+    mv(imagePath, folder, function(err) {
+      // done. it tried fs.rename first, and then falls back to 
+      // piping the source file to the dest file and then unlinking 
+      // the source file. 
+      if(err){
+        console.log('errrrrr'+err);
+      }else{
+        console.log('sucesss');
+        res.send('upload sucesssfully')
+      }
     });
-
-
 });
 
 
 app.post('/submitJson', function (req,res) {
   console.log(req.body)
-  var data    = fs.readFileSync('public/upload/'+req.body.file, { encoding : 'utf8'});
+  var data        = fs.readFileSync('public/upload/'+req.body.file, { encoding : 'utf8'});
   var options = {
     delimiter : ',' ,// optional 
     quote     : '"' // optional 
