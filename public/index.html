@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ordital Firebase</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+   
+    <link rel="stylesheet" href="css/main.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+  </head>
+  <body>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <div class="row" style="margin: 20px 0px 20px 100px">
+       <div class="col-lg-3">
+       <input type="file" name="userPhoto" id="file" accept=".csv"/>
+    </div>
+    <div class="col-lg-3">
+       <input type="submit" value="Upload CSV" class="btn btn-primary" name="submit">
+    </div>
+    <div class="col-lg-12">
+      <input type="button" value="Convert CSV to Json" class="btn btn-primary" onclick="convertCsvToJson()"></input>
+    </div>
+    
+    </div>
+
+
+  </form>
+    
+  
+ 
+  
+  
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+   <script type="text/javascript">
+    var fileName ;
+     function convertCsvToJson (e) {
+      console.log(fileName)
+      $.ajax({
+                url: '/submitJson',
+                dataType: 'text',
+                type: 'post',
+                contentType: 'application/x-www-form-urlencoded',
+                data: {file:fileName},
+                success: function( data, textStatus, jQxhr ){
+                    //console.log('data');
+                   // console.log(data);
+                    var link = document.createElement("a");
+                    link.download = 'nested.json';
+                    link.href = 'upload/final.json';
+                    document.body.appendChild(link);
+                    link.click();
+                    //document.body.removeChild(link);
+                    console.log('onsuccess')
+                },
+                error: function( jqXhr, textStatus, errorThrown ){
+                    console.log( errorThrown );
+                }
+            });
+    }
+  </script>
+  <script>
+  $(document).ready(function() {
+    $("#uploadForm").submit(function(){
+    var formData = new FormData($(this)[0]);
+    var file = document.getElementById('file').files[0]; 
+    fileName = file.name; 
+    console.log(file.name)
+
+    var reader = new FileReader();               
+    reader.onload = function(event) {
+     console.log(reader.result);
+     var i = 0;
+     var chunkSize = 1000;
+     var b_blob = event.target.result;;
+     var bblob = b_blob.split('base64,');
+     var imageData = bblob[1];
+     var imageLength = imageData.length;
+     console.log(imageLength)
+     var isLastChunk = false;
+     var chunk;
+     
+     for(i=0;i<=imageLength; i+= chunkSize){
+       //var imgString = imageData.subString(i,chunkSize);
+        if(imageData.length > i + chunkSize) {
+          chunk = imageData.substr(i, chunkSize);
+          console.log(chunk)
+        } else {
+          chunk = imageData.substr(i,chunkSize);
+          isLastChunk = true;
+          console.log(chunk)
+        }
+       $.ajax({
+          url: '/api/photo',
+          type: 'POST',
+          contentType: 'application/x-www-form-urlencoded',
+          data: {data:chunk,fileName:fileName},
+          cache: false,
+
+          
+          success: function (data) {
+              console.log(data)
+          },
+          error: function( jqXhr, textStatus, errorThrown ){
+              console.log( errorThrown );
+          }
+      });
+            
+     }
+     
+    }
+      reader.readAsDataURL(file);
+      event.preventDefault();
+    
+});   
+});
+  </script>
+  </body>
+
+</html>
