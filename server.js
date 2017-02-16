@@ -51,22 +51,25 @@ app.post('/submitJson', function (req,res) {
   console.log(req.body)
   var data        = fs.readFileSync('public/upload/'+req.body.file, { encoding : 'utf8'});
   var options = {
-    delimiter : ',' ,// optional 
-    quote     : '"' // optional 
+   delimiter : ',', // optional
+   quote     : '"' // optional
   };
    
-  var file = csvjson.toObject(data, options);
+
+  var file = csvjson.toObject(data,options);
   //console.log(file)
   var obj = {};
   var inObj = {};
   var result = _.groupBy(file,'Input_ID');
-  //console.log(result)
+  console.log(result)
   for(var i in result){
       for(var j =0;j<result[i].length;j++){
            inObj[result[i][j].AssignmentId] = result[i][j];
-          //   console.log(result[i][j])
+          //   console.log(result[i][j]);
+         // console.log(inObj)
            delete result[i][j].AssignmentId;
            delete result[i][j].Input_ID;
+           //console.log(inObj)
       }
 
       obj[i] = inObj;
@@ -78,7 +81,7 @@ app.post('/submitJson', function (req,res) {
          if(err){
           }else{
               //console.log(res);
-              //unlink();
+              unlink();
               res.send('fff')
           }
     });

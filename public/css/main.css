@@ -1,0 +1,16 @@
+.loaderInner{
+	position: absolute;
+    margin-left: 27px;
+    margin-top: 10px;
+
+}
+.loaderOuter{
+	position: absolute;
+    top: 50px;
+    left: 250px;
+    background: rgba(32, 27, 27, 0.34);;
+    width: 154px;
+    height: 123px;
+    border-radius: 20px;
+    display: none;
+}

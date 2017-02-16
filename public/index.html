@@ -29,7 +29,12 @@
     </div>
     
     </div>
-
+    <div class="loaderOuter" id="loaderOuter">
+    <div class="loaderInner">
+      <img src="images/loading.gif" style="height: 100px;">
+    </div>
+      
+    </div>
 
   </form>
     
@@ -41,7 +46,8 @@
    <script type="text/javascript">
     var fileName ;
      function convertCsvToJson (e) {
-      console.log(fileName)
+      console.log(fileName);
+
       $.ajax({
                 url: '/submitJson',
                 dataType: 'text',
@@ -73,14 +79,15 @@
     fileName = file.name; 
     console.log(file.name)
 
-    
+    $('#loaderOuter').css('display','block');
     $.ajax({
         url: '/api/photo',
         type: 'POST',
         data: formData,
         async: false,
         success: function (data) {
-            console.log(data)
+            console.log(data);
+            $('.loaderOuter').css('display','none');
         },
         cache: false,
         contentType: false,
