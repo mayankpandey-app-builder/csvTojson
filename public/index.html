@@ -29,12 +29,7 @@
     </div>
     
     </div>
-    <div class="loaderOuter">
-    <div class="loaderInner">
-      <img src="images/loading.gif" style="height: 100px;">
-    </div>
-      
-    </div>
+    
 
   </form>
     
@@ -86,13 +81,8 @@
         type: 'POST',
         data: formData,
         async: false,
-        beforeSend: function ( xhr ) {
-          console.log('sfsfsf')
-         
-        },
         success: function (data) {
-            console.log(data);
-          
+            console.log(data);   
         },
         cache: false,
         contentType: false,
