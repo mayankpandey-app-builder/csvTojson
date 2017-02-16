@@ -9,7 +9,7 @@ var csvjson     = require('csvjson');
 var multipart      = require('connect-multiparty');
 var mv = require('mv');
 
-var port        = process.env.PORT || 7070;
+var port        = process.env.PORT || 8080;
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -56,15 +56,19 @@ app.post('/submitJson', function (req,res) {
   };
    
   var file = csvjson.toObject(data, options);
-
+  //console.log(file)
   var obj = {};
   var inObj = {};
   var result = _.groupBy(file,'Input_ID');
   //console.log(result)
   for(var i in result){
       for(var j =0;j<result[i].length;j++){
-           inObj[result[i][j].AssignmentId] = { HITId: result[i][j].HITId,HITTypeId: result[i][j].HITTypeId }
+           inObj[result[i][j].AssignmentId] = result[i][j];
+          //   console.log(result[i][j])
+           delete result[i][j].AssignmentId;
+           delete result[i][j].Input_ID;
       }
+
       obj[i] = inObj;
       inObj = {};
   }    
