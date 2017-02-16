@@ -30,8 +30,8 @@ app.post('/api/photo',multipart(),function(req,res){
     
     var sourcePath  = imagePath;
     var folder = "public/upload/"+imageName
-    console.log(imagePath)
-    console.log(folder)
+    //console.log(imagePath)
+    //console.log(folder)
 
     mv(imagePath, folder, function(err) {
       // done. it tried fs.rename first, and then falls back to 
@@ -40,7 +40,7 @@ app.post('/api/photo',multipart(),function(req,res){
       if(err){
         console.log('errrrrr'+err);
       }else{
-        console.log('sucesss');
+        //console.log('sucesss');
         res.send('upload sucesssfully')
       }
     });
@@ -48,7 +48,7 @@ app.post('/api/photo',multipart(),function(req,res){
 
 
 app.post('/submitJson', function (req,res) {
-  console.log(req.body)
+  //console.log(req.body)
   var data        = fs.readFileSync('public/upload/'+req.body.file, { encoding : 'utf8'});
   var options = {
    delimiter : ',', // optional
@@ -61,7 +61,7 @@ app.post('/submitJson', function (req,res) {
   var obj = {};
   var inObj = {};
   var result = _.groupBy(file,'Input_ID');
-  console.log(result)
+  //console.log(result)
   for(var i in result){
       for(var j =0;j<result[i].length;j++){
            inObj[result[i][j].AssignmentId] = result[i][j];
@@ -95,7 +95,7 @@ var unlink = function (argument) {
   setTimeout(function () {
      fs.readdir('public/upload/.',function (err, files){  
      for (var i = 0, len = files.length; i < len; i++) {
-          console.log(files)
+          //console.log(files)
           fs.unlink('public/upload/'+files[i], function (err,result) {
           });
         /*var match = files[i].match(/en.*.js/);
