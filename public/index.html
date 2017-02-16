@@ -68,15 +68,35 @@
   </script>
   <script>
   $(document).ready(function() {
-    $("#uploadForm").submit(function(){
-      
+    $("#uploadForm").submit(function(e){
+      e.preventDefault();
     var formData = new FormData($(this)[0]);
     var file = document.getElementById('file').files[0]; 
     fileName = file.name; 
     console.log(file.name)
+    var csvHeaders ;
+    var r = new FileReader();
+    r.onload = function(e) {
+        var contents = e.target.result;
+        //console.log(contents);
+        var allTextLines = contents.split(/\r\n|\n/);
+        //console.log(allTextLines)
+        csvHeaders = allTextLines[0].split(',');
+         formData.append("header",csvHeaders);
+         console.log(formData);
+         submitData(formData)
+        
 
+    };
     
-    $.ajax({
+
+    r.readAsText(file);
+        
+   
+});   
+});
+  function submitData(formData){
+     $.ajax({
         url: '/api/photo',
         type: 'POST',
         data: formData,
@@ -89,9 +109,9 @@
         contentType: false,
         processData: false
     });
+
     return false;
-});   
-});
+  }
   </script>
   </body>
 

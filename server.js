@@ -22,12 +22,15 @@ app.use(express.static(__dirname + '/public'));
 app.get('/',function(req,res){
   res.sendFile(__dirname + "/index.html");
 });
-
+var header;
 app.post('/api/photo',multipart(),function(req,res){
     //console.log(req.files);
+    //console.log(req.body)
     var imageName     = req.files.userPhoto.name;
     var imagePath   = req.files.userPhoto.path;
-    
+    header      = req.body.header;
+    //console.log(header) 
+
     var sourcePath  = imagePath;
     var folder = "public/upload/"+imageName
     //console.log(imagePath)
@@ -54,21 +57,29 @@ app.post('/submitJson', function (req,res) {
    delimiter : ',', // optional
    quote     : '"' // optional
   };
-   
+  var csvHeaders = header.split(",");
+  var firstLevelNode = csvHeaders[0];
+  var secondLevelNode = csvHeaders[1];
+
 
   var file = csvjson.toObject(data,options);
-  //console.log(file)
+
+
   var obj = {};
   var inObj = {};
-  var result = _.groupBy(file,'Input_ID');
-  //console.log(result)
+  var result = _.groupBy(file,firstLevelNode);
+
+  
   for(var i in result){
       for(var j =0;j<result[i].length;j++){
-           inObj[result[i][j].AssignmentId] = result[i][j];
-          //   console.log(result[i][j]);
-         // console.log(inObj)
-           delete result[i][j].AssignmentId;
-           delete result[i][j].Input_ID;
+       _.forEach(result[i][j],function (value,key) {
+        if(result[i][j][key] == '' || result[i][j][key] == null){
+         delete result[i][j][key];
+        }
+       })
+        inObj[result[i][j][secondLevelNode]] = result[i][j];
+        delete result[i][j][secondLevelNode];
+        delete result[i][j][firstLevelNode];
            //console.log(inObj)
       }
 
