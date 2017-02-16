@@ -25,7 +25,7 @@
        <input type="submit" value="Upload CSV" class="btn btn-primary" name="submit">
     </div>
     <div class="col-lg-12">
-      <input type="button" value="Convert CSV to Json" class="btn btn-primary" onclick="convertCsvToJson()"></input>
+      <input type="button" value="Convert CSV to Json" class="btn btn-primary" id="converter" onclick="convertCsvToJson()" disabled></input>
     </div>
     
     </div>
@@ -83,6 +83,7 @@
         async: false,
         success: function (data) {
             console.log(data);   
+            $('#converter').removeAttr('disabled')
         },
         cache: false,
         contentType: false,
