@@ -12,5 +12,8 @@
     width: 154px;
     height: 123px;
     border-radius: 20px;
-    display: none;
+    
+}
+#loaderOuter{
+	display: none;
 }

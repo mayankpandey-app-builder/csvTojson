@@ -29,7 +29,7 @@
     </div>
     
     </div>
-    <div class="loaderOuter" id="loaderOuter">
+    <div class="loaderOuter">
     <div class="loaderInner">
       <img src="images/loading.gif" style="height: 100px;">
     </div>
@@ -74,20 +74,25 @@
   <script>
   $(document).ready(function() {
     $("#uploadForm").submit(function(){
+      
     var formData = new FormData($(this)[0]);
     var file = document.getElementById('file').files[0]; 
     fileName = file.name; 
     console.log(file.name)
 
-    $('#loaderOuter').css('display','block');
+    
     $.ajax({
         url: '/api/photo',
         type: 'POST',
         data: formData,
         async: false,
+        beforeSend: function ( xhr ) {
+          console.log('sfsfsf')
+         
+        },
         success: function (data) {
             console.log(data);
-            //$('#loaderOuter').css('display','none');
+          
         },
         cache: false,
         contentType: false,
